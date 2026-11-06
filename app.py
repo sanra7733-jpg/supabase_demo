@@ -1,23 +1,19 @@
-import os
-from supabase import create_client, Client
-from dotenv import load_dotenv
+import web
 
-# Cargar las variables de entorno desde el archivo .env
-load_dotenv()
+#Exportación  explicita de rutas
+from mvc.controllers.index import Index
+from mvc.controllers.contactos import Contactos
 
-SUPABASE_URL = os.environ.get("SUPABASE_URL")
-SUPABASE_KEY = os.environ.get("SUPABASE_KEY")
+web.config.debug = False
 
-# Inicializar el cliente de Supabase de forma correcta
-supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
+urls = (
+    '/', 'Index',
+    '/contactos', 'Contactos',
+)
 
-# SELECT * FROM contactos;
-def obtenerContactos():
-    # Realizar la consulta a la tabla 'contactos'
-    response = supabase.table("contactos").select("*").execute()
-    return response.data
+app = web.application(urls, globals())
 
-# Imprimir los resultados en la terminal
-print(obtenerContactos())
+if __name__ == "__main__":
+    app.run()
 
-
+    
